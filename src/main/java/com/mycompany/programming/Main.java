@@ -8,16 +8,16 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("=== REGISTRATION ===");
+        System.out.print("Enter first name: ");
+        String first = sc.nextLine();
+        System.out.print("Enter last name: ");
+        String last = sc.nextLine();
         System.out.print("Enter username: ");
         String user = sc.nextLine();
         System.out.print("Enter password: ");
         String pass = sc.nextLine();
         System.out.print("Enter cell (+27…): ");
         String cell = sc.nextLine();
-        System.out.print("Enter first name: ");
-        String first = sc.nextLine();
-        System.out.print("Enter last name: ");
-        String last = sc.nextLine();
 
         String regMsg = login.registerUser(user, pass, cell, first, last);
         System.out.println(regMsg);
