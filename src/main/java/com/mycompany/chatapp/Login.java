@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
  */
 public class Login {
 
-    // Stored credentials after successful registration
+    // Stored credetials after successful registration
     private String storedUsername;
     private String storedPassword;
     private String firstName;
@@ -26,7 +26,7 @@ public class Login {
     public boolean checkUserName(String username) {
         return username != null
                 && username.contains("_")
-                && username.length() <= 5;
+                && username.length() <= 55;
     }
 
     /**
