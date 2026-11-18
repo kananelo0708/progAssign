@@ -1,5 +1,6 @@
 package com.mycompany.ChatApp;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -45,6 +46,16 @@ public class Main {
             loggedIn = login.loginUser(loginUser, loginPass);
         }
 
+        // The logged-in user is the sender of every message
+        Message.setDefaultSender(login.getUsername());
+
+        // Read the JSON file into the Stored Messages array
+        int loaded = Message.loadStoredMessages();
+        if (loaded > 0) {
+            System.out.println("\nLoaded " + loaded + " stored message(s) from "
+                    + Message.getStoragePath() + ".");
+        }
+
         // Messaging is only available after a successful login
         runQuickChat(sc);
         sc.close();
@@ -65,8 +76,9 @@ public class Main {
             System.out.println("1) Send Messages");
             System.out.println("2) Show recently sent messages");
             System.out.println("3) Quit");
+            System.out.println("4) Stored Messages");
 
-            int choice = readInt(sc, "Option: ", 1, 3);
+            int choice = readInt(sc, "Option: ", 1, 4);
 
             switch (choice) {
                 case 1:
@@ -78,6 +90,77 @@ public class Main {
                 case 3:
                     running = false;
                     System.out.println("Goodbye.");
+                    break;
+                case 4:
+                    runStoredMessagesMenu(sc);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    // ---------- Stored Messages menu (Part 3) ----------
+
+    private static void runStoredMessagesMenu(Scanner sc) {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n=== STORED MESSAGES ===");
+            System.out.println("1) Display the sender and recipient of all stored messages");
+            System.out.println("2) Display the longest stored message");
+            System.out.println("3) Search for a message ID");
+            System.out.println("4) Search for all messages stored for a recipient");
+            System.out.println("5) Delete a message using the message hash");
+            System.out.println("6) Display a report of all stored messages");
+            System.out.println("7) Display a report of all sent messages");
+            System.out.println("8) Back to the main menu");
+
+            int choice = readInt(sc, "Option: ", 1, 8);
+            System.out.println();
+
+            switch (choice) {
+                case 1:
+                    System.out.println(Message.displayStoredSendersAndRecipients());
+                    break;
+                case 2: {
+                    String longest = Message.longestStoredMessage();
+                    if (longest.isEmpty()) {
+                        System.out.println(Message.NO_STORED_MESSAGES);
+                    } else {
+                        System.out.println("Longest stored message: " + longest);
+                    }
+                    break;
+                }
+                case 3: {
+                    System.out.print("Enter the message ID: ");
+                    System.out.println(Message.searchByMessageID(sc.nextLine()));
+                    break;
+                }
+                case 4: {
+                    System.out.print("Enter the recipient cell number: ");
+                    List<String> results = Message.searchStoredByRecipient(sc.nextLine());
+                    if (results.isEmpty()) {
+                        System.out.println("No stored messages found for that recipient.");
+                    } else {
+                        for (int i = 0; i < results.size(); i++) {
+                            System.out.println((i + 1) + ") " + results.get(i));
+                        }
+                    }
+                    break;
+                }
+                case 5: {
+                    System.out.print("Enter the message hash: ");
+                    System.out.println(Message.deleteByHash(sc.nextLine()));
+                    break;
+                }
+                case 6:
+                    System.out.println(Message.storedMessagesReport());
+                    break;
+                case 7:
+                    System.out.println(Message.displayReport());
+                    break;
+                case 8:
+                    back = true;
                     break;
                 default:
                     break;
