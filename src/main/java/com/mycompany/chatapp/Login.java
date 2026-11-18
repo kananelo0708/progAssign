@@ -12,11 +12,25 @@ import java.util.regex.Matcher;
  */
 public class Login {
 
-    // Stored credetials after successful registration
+    // Stored credentials after successful registration
     private String storedUsername;
     private String storedPassword;
     private String firstName;
     private String lastName;
+
+    // ---------- Getters (used by QuickChat as the message sender) ----------
+
+    public String getUsername() {
+        return storedUsername;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
 
     // ---------- Validation methods ----------
 
@@ -26,7 +40,7 @@ public class Login {
     public boolean checkUserName(String username) {
         return username != null
                 && username.contains("_")
-                && username.length() <= 55;
+                && username.length() <= 5;
     }
 
     /**
